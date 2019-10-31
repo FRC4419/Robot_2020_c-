@@ -1,4 +1,5 @@
 #include "Robot.h"
+#include <iostream>
 #ifndef RUNNING_FRC_TESTS
 int main() 
 { 
