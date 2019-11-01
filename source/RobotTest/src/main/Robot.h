@@ -29,5 +29,5 @@ class Robot : public frc::TimedRobot {
   const std::string kAutoNameCustom = "My Auto";
   std::string m_autoSelected;
 
-  frc::VictorSP m_Motor0 {0};
+  frc::VictorSP m_Motor0{0};
 };
