@@ -39,16 +39,19 @@ void Robot::RobotPeriodic() {
   float throttleLimit = 0.5;
   float steer = m_Joystick->GetRawAxis(0);
   float throttle = m_Joystick->GetRawAxis(3);
+  float negthrottle = m_Joystick->GetRawAxis(2);
+  float backup = negthrottle - negthrottle + negthrottle;
+  float accel = negthrottle - throttle;
 
-  std::cout << throttle << " / " << steer << std::endl;
+  std::cout << negthrottle << throttle << " / " << steer << std::endl;
 
   float leftMotor = clamp(1 - 2 * steer, -1, 1);
   float rightMotor = -clamp(1 - 2 * -steer, -1, 1);
 
   m_Motor0.EnableDeadbandElimination(true);
-  m_Motor0.Set(leftMotor * throttle * throttleLimit);
+  m_Motor0.Set(leftMotor * accel * throttleLimit);
   m_Motor1.EnableDeadbandElimination(true);
-  m_Motor1.Set(rightMotor * throttle * throttleLimit);
+  m_Motor1.Set(rightMotor * accel * throttleLimit);
 
 
 }
