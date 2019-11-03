@@ -12,6 +12,7 @@
 #include <frc/TimedRobot.h>
 #include <frc/smartdashboard/SendableChooser.h>
 #include <frc/VictorSP.h>
+#include <frc/Joystick.h>
 
 class Robot : public frc::TimedRobot {
  public:
@@ -24,10 +25,7 @@ class Robot : public frc::TimedRobot {
   void TestPeriodic() override;
 
  private:
-  frc::SendableChooser<std::string> m_chooser;
-  const std::string kAutoNameDefault = "Default";
-  const std::string kAutoNameCustom = "My Auto";
-  std::string m_autoSelected;
-
   frc::VictorSP m_Motor0{0};
+  frc::VictorSP m_Motor1{1};
+  frc::Joystick* m_Joystick;
 };
