@@ -40,8 +40,7 @@ void Robot::RobotPeriodic() {
   float steer = m_Joystick->GetRawAxis(0);
   float throttle = m_Joystick->GetRawAxis(3);
   float negthrottle = m_Joystick->GetRawAxis(2);
-  float backup = negthrottle - negthrottle + negthrottle;
-  float accel = negthrottle - throttle;
+  float accel = throttle - negthrottle;
 
   std::cout << negthrottle << throttle << " / " << steer << std::endl;
 
