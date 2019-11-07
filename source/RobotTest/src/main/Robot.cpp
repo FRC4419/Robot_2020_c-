@@ -33,9 +33,11 @@ float clamp(float v, float min, float max)
     return max;
   return v;
 }
+//sensitivity
 float throt = 0.0;
 float steer = 0.0;
 float accel = 0.04;
+//runs every 20ms
 void Robot::RobotPeriodic() {
 
   //std::cout <<  m_PDP->GetCurrent(12) << std::endl;
@@ -72,7 +74,7 @@ void Robot::RobotPeriodic() {
   //left and right motor throttles
   float motorLeft = -steer + throt;
   float motorRight = steer + throt;
-
+  //calls motors to run
   m_Motor0.EnableDeadbandElimination(true);
   m_Motor0.Set(motorLeft * throttleLimit);
   m_Motor1.EnableDeadbandElimination(true);
