@@ -13,6 +13,7 @@
 #include <frc/smartdashboard/SendableChooser.h>
 #include <frc/VictorSP.h>
 #include <frc/Joystick.h>
+#include <frc/PowerDistributionPanel.h>
 
 class Robot : public frc::TimedRobot {
  public:
@@ -28,4 +29,5 @@ class Robot : public frc::TimedRobot {
   frc::VictorSP m_Motor0{0};
   frc::VictorSP m_Motor1{1};
   frc::Joystick* m_Joystick;
+  frc::PowerDistributionPanel* m_PDP;
 };

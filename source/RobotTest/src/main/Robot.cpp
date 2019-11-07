@@ -13,6 +13,7 @@
 
 void Robot::RobotInit() {
   m_Joystick = new frc::Joystick(0);
+  m_PDP = new frc::PowerDistributionPanel();
   std::cout << "Robot Initing..." << std::endl;
 }
 
@@ -32,27 +33,50 @@ float clamp(float v, float min, float max)
     return max;
   return v;
 }
-
-
-
+float throt = 0.0;
+float steer = 0.0;
+float accel = 0.04;
 void Robot::RobotPeriodic() {
+
+  //std::cout <<  m_PDP->GetCurrent(12) << std::endl;
+
+  //motor throttle multiplier
   float throttleLimit = 0.5;
-  float steer = m_Joystick->GetRawAxis(0);
-  float throttle = m_Joystick->GetRawAxis(3);
+
+  //if the xbox controller joystick is lower than this, it will ignore the input
+  //due to the joystick is not always fully centered
+  float tolerance = 0.01;
+
+  
+  //raw steering value - dont use
+  float steera = m_Joystick->GetRawAxis(0);
+  //raw positive throttle - dont use
+  float posthrottle = m_Joystick->GetRawAxis(3);
+  //raw negative throttle - dont use
   float negthrottle = m_Joystick->GetRawAxis(2);
-  float accel = throttle - negthrottle;
+  //raw summed throttle - dont use
+  float throttle = posthrottle - negthrottle;
 
-  std::cout << negthrottle << throttle << " / " << steer << std::endl;
+  //easing steering value for non sudden acceleration
+  steer = (1 - accel) * steer + accel * steera;
 
-  float leftMotor = clamp(1 - 2 * steer, -1, 1);
-  float rightMotor = -clamp(1 - 2 * -steer, -1, 1);
+  //set throttle to zero if thottle is lower than tolerance
+  if (abs(throttle) < tolerance)
+  {
+    throttle = 0;
+  }
+
+  //easing throttle value for non suddden acceleration - avoid wheelslip
+  throt = throt * (1 - accel) + throttle * accel;
+
+  //left and right motor throttles
+  float motorLeft = -steer + throt;
+  float motorRight = steer + throt;
 
   m_Motor0.EnableDeadbandElimination(true);
-  m_Motor0.Set(leftMotor * accel * throttleLimit);
+  m_Motor0.Set(motorLeft * throttleLimit);
   m_Motor1.EnableDeadbandElimination(true);
-  m_Motor1.Set(rightMotor * accel * throttleLimit);
-
-
+  m_Motor1.Set(-motorRight * throttleLimit);
 }
 
 /**
