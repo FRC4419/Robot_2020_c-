@@ -13,7 +13,8 @@
 
 void Robot::RobotInit() {
   m_Joystick = new frc::Joystick(0);
-  m_PDP = new frc::PowerDistributionPanel();
+  m_PDP = new frc::PowerDistributionPanel(0);
+  m_PDP->ResetTotalEnergy();
   std::cout << "Robot Initing..." << std::endl;
 }
 
@@ -38,18 +39,24 @@ float throt = 0.0;
 float steer = 0.0;
 float accel = 0.04;
 //runs every 20ms
+
+float timeUntilSend = 0.0;
+
 void Robot::RobotPeriodic() {
-
-  //std::cout <<  m_PDP->GetCurrent(12) << std::endl;
-
+  
+  timeUntilSend += 20.0 / 1000.0;
+  {
+    timeUntilSend = 0;
+    std::cout << m_PDP->GetTotalCurrent() << std::endl;
+  }
   //motor throttle multiplier
   float throttleLimit = 0.5;
 
   //if the xbox controller joystick is lower than this, it will ignore the input
   //due to the joystick is not always fully centered
-  float tolerance = 0.01;
+  float tolerance = 0.03;
 
-  
+
   //raw steering value - dont use
   float steera = m_Joystick->GetRawAxis(0);
   //raw positive throttle - dont use
@@ -74,11 +81,13 @@ void Robot::RobotPeriodic() {
   //left and right motor throttles
   float motorLeft = -steer + throt;
   float motorRight = steer + throt;
+  float sumThrottle = (motorLeft + motorRight);
+  if (sumThrottle < 1) sumThrottle = 1;
   //calls motors to run
   m_Motor0.EnableDeadbandElimination(true);
-  m_Motor0.Set(motorLeft * throttleLimit);
+  m_Motor0.Set(motorLeft / sumThrottle * throttleLimit);
   m_Motor1.EnableDeadbandElimination(true);
-  m_Motor1.Set(-motorRight * throttleLimit);
+  m_Motor1.Set(-motorRight / sumThrottle * throttleLimit);
 }
 
 /**
