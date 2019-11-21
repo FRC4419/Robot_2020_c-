@@ -60,11 +60,13 @@ void Robot::RobotPeriodic() {
   //raw steering value - dont use
   float steera = m_Joystick->GetRawAxis(0);
   //raw positive throttle - dont use
-  float posthrottle = m_Joystick->GetRawAxis(3);
+  float posthrottle = m_Joystick->GetRawAxis(1);//m_Joystick->GetRawAxis(3);
   //raw negative throttle - dont use
-  float negthrottle = m_Joystick->GetRawAxis(2);
+  float negthrottle = 0;// m_Joystick->GetRawAxis(2);
   //raw summed throttle - dont use
   float throttle = posthrottle - negthrottle;
+
+  std::cout << "Test A: " << steera << " Test B:" << posthrottle << std::endl;
 
   //easing steering value for non sudden acceleration
   steer = (1 - accel) * steer + accel * steera;
