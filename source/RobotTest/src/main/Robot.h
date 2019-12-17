@@ -15,6 +15,8 @@
 #include <frc/Joystick.h>
 #include <frc/PowerDistributionPanel.h>
 
+#include "rev/CANSparkMax.h"
+
 class Robot : public frc::TimedRobot {
  public:
   void RobotInit() override;
@@ -26,8 +28,7 @@ class Robot : public frc::TimedRobot {
   void TestPeriodic() override;
 
  private:
-  frc::VictorSP m_Motor0{0};
-  frc::VictorSP m_Motor1{1};
+  rev::CANSparkMax m_Motor0{2, rev::CANSparkMax::MotorType::kBrushless};
   frc::Joystick* m_Joystick;
   frc::PowerDistributionPanel* m_PDP;
 };

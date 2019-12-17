@@ -60,9 +60,10 @@ void Robot::RobotPeriodic() {
   //raw steering value - dont use
   float steera = m_Joystick->GetRawAxis(0);
   //raw positive throttle - dont use
-  float posthrottle = m_Joystick->GetRawAxis(1);//m_Joystick->GetRawAxis(3);
+  //m_Joystick->GetRawAxis(1);//
+  float posthrottle = m_Joystick->GetRawAxis(3);
   //raw negative throttle - dont use
-  float negthrottle = 0;// m_Joystick->GetRawAxis(2);
+  float negthrottle =  m_Joystick->GetRawAxis(2);
   //raw summed throttle - dont use
   float throttle = posthrottle - negthrottle;
 
@@ -86,10 +87,13 @@ void Robot::RobotPeriodic() {
   float sumThrottle = (motorLeft + motorRight);
   if (sumThrottle < 1) sumThrottle = 1;
   //calls motors to run
-  m_Motor0.EnableDeadbandElimination(true);
+  // m_Motor0.EnableDeadbandElimination(true);
+  // m_Motor0.Set(motorLeft / sumThrottle * throttleLimit);
+  // m_Motor1.EnableDeadbandElimination(true);
+  // m_Motor1.Set(-motorRight / sumThrottle * throttleLimit);
+  std::cout << m_Motor0.status_code;
+  m_Motor0.RestoreFactoryDefaults();
   m_Motor0.Set(motorLeft / sumThrottle * throttleLimit);
-  m_Motor1.EnableDeadbandElimination(true);
-  m_Motor1.Set(-motorRight / sumThrottle * throttleLimit);
 }
 
 /**
