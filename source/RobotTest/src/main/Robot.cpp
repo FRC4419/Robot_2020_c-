@@ -12,10 +12,14 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 
 void Robot::RobotInit() {
+  std::cout << "Robot Initing..." << std::endl;
+
   m_Joystick = new frc::Joystick(0);
   m_PDP = new frc::PowerDistributionPanel(0);
   m_PDP->ResetTotalEnergy();
-  std::cout << "Robot Initing..." << std::endl;
+
+  m_Motor0.RestoreFactoryDefaults();
+  m_Motor1.RestoreFactoryDefaults();
 }
 
 /**
@@ -47,7 +51,7 @@ void Robot::RobotPeriodic() {
   timeUntilSend += 20.0 / 1000.0;
   {
     timeUntilSend = 0;
-    std::cout << m_PDP->GetTotalCurrent() << std::endl;
+    //std::cout << m_PDP->GetTotalCurrent() << std::endl;
   }
   //motor throttle multiplier
   float throttleLimit = 0.5;
@@ -55,6 +59,7 @@ void Robot::RobotPeriodic() {
   //if the xbox controller joystick is lower than this, it will ignore the input
   //due to the joystick is not always fully centered
   float tolerance = 0.03;
+  float steerTolerance = 0.07;
 
 
   //raw steering value - dont use
@@ -69,6 +74,10 @@ void Robot::RobotPeriodic() {
 
   std::cout << "Test A: " << steera << " Test B:" << posthrottle << std::endl;
 
+
+  if (abs(steera) < steerTolerance)
+    steera = 0;
+
   //easing steering value for non sudden acceleration
   steer = (1 - accel) * steer + accel * steera;
 
@@ -77,6 +86,7 @@ void Robot::RobotPeriodic() {
   {
     throttle = 0;
   }
+
 
   //easing throttle value for non suddden acceleration - avoid wheelslip
   throt = throt * (1 - accel) + throttle * accel;
@@ -91,9 +101,9 @@ void Robot::RobotPeriodic() {
   // m_Motor0.Set(motorLeft / sumThrottle * throttleLimit);
   // m_Motor1.EnableDeadbandElimination(true);
   // m_Motor1.Set(-motorRight / sumThrottle * throttleLimit);
-  std::cout << m_Motor0.status_code;
-  m_Motor0.RestoreFactoryDefaults();
+  // std::cout << "Motor Bus Voltage: " << m_Motor0.GetBusVoltage() << std::endl;
   m_Motor0.Set(motorLeft / sumThrottle * throttleLimit);
+  m_Motor1.Set(-motorRight / sumThrottle * throttleLimit);
 }
 
 /**

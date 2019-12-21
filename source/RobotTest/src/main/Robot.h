@@ -28,7 +28,8 @@ class Robot : public frc::TimedRobot {
   void TestPeriodic() override;
 
  private:
-  rev::CANSparkMax m_Motor0{2, rev::CANSparkMax::MotorType::kBrushless};
+  rev::CANSparkMax m_Motor0{14, rev::CANSparkMax::MotorType::kBrushless};
+  rev::CANSparkMax m_Motor1{13, rev::CANSparkMax::MotorType::kBrushless};
   frc::Joystick* m_Joystick;
   frc::PowerDistributionPanel* m_PDP;
 };
