@@ -92,8 +92,8 @@ void Robot::RobotPeriodic() {
   throt = throt * (1 - accel) + throttle * accel;
 
   //left and right motor throttles
-  float motorLeft = -steer + throt;
-  float motorRight = steer + throt;
+  float motorLeft = steer + throt;
+  float motorRight = -steer + throt;
   float sumThrottle = (motorLeft + motorRight);
   if (sumThrottle < 1) sumThrottle = 1;
   //calls motors to run
@@ -102,8 +102,8 @@ void Robot::RobotPeriodic() {
   // m_Motor1.EnableDeadbandElimination(true);
   // m_Motor1.Set(-motorRight / sumThrottle * throttleLimit);
   // std::cout << "Motor Bus Voltage: " << m_Motor0.GetBusVoltage() << std::endl;
-  m_Motor0.Set(motorLeft / sumThrottle * throttleLimit);
-  m_Motor1.Set(-motorRight / sumThrottle * throttleLimit);
+  m_Motor0.Set(-motorLeft / sumThrottle * throttleLimit);
+  m_Motor1.Set(motorRight / sumThrottle * throttleLimit);
 }
 
 /**
